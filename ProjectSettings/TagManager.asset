@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Obstacle
+  - Turn
+  - Ramp
+  - Fall
+  - Jump
   layers:
   - Default
   - TransparentFX
@@ -12,7 +16,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 
