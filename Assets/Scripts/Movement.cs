@@ -8,19 +8,21 @@ public class Movement : MonoBehaviour
     public Rigidbody rb;
     public static float speed = 750f;
 
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotation;
     }
-    
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (!PlayerCollisionController.levelFinished)
+        if (!GameManager.levelFinished && GameManager.isGameActive)
         {
+            GameManager.isGameStarted = true;
             rb.velocity = transform.forward * speed * Time.fixedDeltaTime;
         }
     }
-}
+
+}   

@@ -11,11 +11,6 @@ public class PlayerScaleController : MonoBehaviour
     private float scaleChangeSpeed = 0.5f;
     private float touchSwipeSensitivity = 10;
 
-    private void Awake()
-    {
-        Debug.Log(touchSwipeSensitivity);
-    }
-
     private void Start()
     {
         transform.localScale = new Vector3(1, 1, 1);

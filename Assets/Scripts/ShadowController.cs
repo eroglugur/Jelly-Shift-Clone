@@ -9,39 +9,39 @@ public class ShadowController : MonoBehaviour
 {
     [SerializeField] private GameObject player;
 
-    public Transform[] obstacles;
-    public int obstacleIndex = 0;
-
-    public static bool obstacleLeft = true;
+    private RaycastHit hit;
+    public LayerMask obstacleMask;
 
     private void Start()
     {
         SetDestination();
-        transform.localScale = player.transform.localScale;
-        transform.position = new Vector3(transform.position.x, transform.localScale.y / 2, transform.position.z);
-    }
-
-    private void Update()
-    {
-        if (!obstacleLeft)
-        {
-            gameObject.SetActive(false);
-        }
     }
     
     private void FixedUpdate()
     {
-        transform.localScale = player.transform.localScale;
-        transform.position = new Vector3(transform.position.x, transform.localScale.y / 2, transform.position.z);
+        SetDestination();
     }
 
     public void SetDestination()
     {
-        if (obstacleIndex == obstacles.Length)
+        if (IsObjectInFront())
         {
-            obstacleLeft = false;
+            transform.position = hit.collider.gameObject.transform.position;
+            transform.localScale = player.transform.localScale;
+            transform.position = new Vector3(transform.position.x, transform.localScale.y / 2, transform.position.z);
         }
-        
-        transform.position = obstacles[obstacleIndex].position;
     }
+    
+    public bool IsObjectInFront()
+    {
+        if (Physics.Raycast(player.transform.position, player.transform.TransformDirection(player.transform.forward), out hit, Mathf.Infinity, obstacleMask))
+        {
+            if (hit.collider.gameObject.CompareTag("Obstacle"))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+  
 }

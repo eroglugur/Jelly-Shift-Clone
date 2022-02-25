@@ -8,9 +8,20 @@ public class DistanceShadowController : MonoBehaviour
     [SerializeField] private GameObject mainShadow;
     [SerializeField] private GameObject player;
 
+    private ShadowController shadowController ;
+
+    private void Start()
+    {
+        shadowController = FindObjectOfType<ShadowController>();
+    }
+
     private void Update()
     {
-        if (!ShadowController.obstacleLeft)
+        if (shadowController.IsObjectInFront())
+        {
+            gameObject.SetActive(true);
+        }
+        else
         {
             gameObject.SetActive(false);
         }
