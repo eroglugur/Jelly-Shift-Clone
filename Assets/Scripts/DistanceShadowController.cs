@@ -8,31 +8,45 @@ public class DistanceShadowController : MonoBehaviour
     [SerializeField] private GameObject mainShadow;
     [SerializeField] private GameObject player;
 
-    private ShadowController shadowController ;
+    private PlayerScaleController playerScaleController;
 
     private void Start()
     {
-        shadowController = FindObjectOfType<ShadowController>();
-    }
-
-    private void Update()
-    {
-        if (shadowController.IsObjectInFront())
-        {
-            gameObject.SetActive(true);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        playerScaleController = FindObjectOfType<PlayerScaleController>();
     }
 
     private void FixedUpdate()
     {
-        transform.localScale = new Vector3(mainShadow.transform.localScale.x, mainShadow.transform.localScale.y, Mathf.Abs((mainShadow.transform.position.z - player.transform.position.z)));
-        
-        transform.position = new Vector3(transform.position.x, transform.localScale.y / 2, player.transform.position.z + transform.localScale.z / 2);
+        SetPosition();
+        SetScale();
+    }
 
-        
+    void SetPosition()
+    {
+        if (player.transform.rotation.y == 0)
+        {
+            transform.position = new Vector3(mainShadow.transform.position.x, transform.localScale.y / 2,
+                player.transform.position.z + transform.localScale.z / 2);
+        }
+        else
+        {
+            transform.position = new Vector3(player.transform.position.x + transform.localScale.x / 2,
+                transform.localScale.y / 2, mainShadow.transform.position.z);
+        }
+    }
+
+    void SetScale()
+    {
+        if (player.transform.rotation.y == 0)
+        {
+            transform.localScale = new Vector3(mainShadow.transform.localScale.x, mainShadow.transform.localScale.y,
+                Mathf.Abs((mainShadow.transform.position.z - player.transform.position.z)));
+        }
+        else
+        {
+            transform.localScale = new Vector3(Mathf.Abs(mainShadow.transform.position.x - player.transform.position.x),
+                mainShadow.transform.localScale.y,
+                mainShadow.transform.localScale.z);
+        }
     }
 }

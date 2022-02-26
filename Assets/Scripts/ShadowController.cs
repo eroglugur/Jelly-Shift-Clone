@@ -1,47 +1,44 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.Timeline;
 using UnityEngine;
 
 public class ShadowController : MonoBehaviour
 {
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject distanceShadow;
 
-    private RaycastHit hit;
-    public LayerMask obstacleMask;
+    private Movement playerMovement;
 
+    private MeshRenderer mRenderer;
     private void Start()
     {
+        mRenderer = GetComponent<MeshRenderer>();
+        playerMovement = FindObjectOfType<Movement>();
         SetDestination();
     }
-    
+
     private void FixedUpdate()
     {
-        SetDestination();
+        if (playerMovement.IsObjectInFront())
+        {
+            SetDestination();
+            mRenderer.enabled = true;
+            distanceShadow.gameObject.SetActive(true);
+        }
+        else
+        {
+            mRenderer.enabled = false;
+            distanceShadow.gameObject.SetActive(false);
+        }
     }
 
     public void SetDestination()
     {
-        if (IsObjectInFront())
-        {
-            transform.position = hit.collider.gameObject.transform.position;
-            transform.localScale = player.transform.localScale;
-            transform.position = new Vector3(transform.position.x, transform.localScale.y / 2, transform.position.z);
-        }
+        transform.position = playerMovement.hit.collider.gameObject.transform.position;
+        transform.localScale = player.transform.localScale;
+        transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
+
+        transform.rotation = player.transform.rotation;
     }
-    
-    public bool IsObjectInFront()
-    {
-        if (Physics.Raycast(player.transform.position, player.transform.TransformDirection(player.transform.forward), out hit, Mathf.Infinity, obstacleMask))
-        {
-            if (hit.collider.gameObject.CompareTag("Obstacle"))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-  
 }

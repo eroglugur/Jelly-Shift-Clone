@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
 using DG.Tweening;
-using Unity.Mathematics;
-using UnityEngine.Video;
 using Vector3 = UnityEngine.Vector3;
 
 public class PlayerCollisionController : MonoBehaviour
@@ -15,6 +9,7 @@ public class PlayerCollisionController : MonoBehaviour
     private Rigidbody rb;
     private ShadowController shadowController;
 
+    public static bool objectIsColliding;
 
     private void Start()
     {
@@ -28,20 +23,15 @@ public class PlayerCollisionController : MonoBehaviour
         if (other.gameObject.CompareTag("Obstacle"))
         {
             shadowController.SetDestination();
-            Movement.speed += 100;
+            if (Movement.speed < Movement.speedLimit)
+            {
+                Movement.speed += 100;
+            }
         }
 
         if (other.gameObject.CompareTag("Finish"))
         {
             GameManager.levelFinished = true;
-            if (transform.rotation.y == 0)
-            {
-                //transform.DOMoveZ(transform.localPosition.z + 3, 1);
-            }
-            else
-            {
-                //  transform.DOMoveX(transform.localPosition.x + 3, 1);
-            }
         }
 
         if (other.gameObject.CompareTag("Turn"))
@@ -64,6 +54,7 @@ public class PlayerCollisionController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Obstacle"))
         {
+            objectIsColliding = true;
             if (transform.rotation.y == 0)
             {
                 transform.DOMoveZ(transform.localPosition.z - 3, 1);
@@ -75,11 +66,8 @@ public class PlayerCollisionController : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay(Collision collisionInfo)
+    private void OnCollisionExit(Collision other)
     {
-        if (collisionInfo.gameObject.CompareTag("Jump"))
-        {
-            //rb.AddForce(transform.up.normalized * 30000f * Time.fixedDeltaTime, ForceMode.Acceleration);
-        }
+        objectIsColliding = false;
     }
 }

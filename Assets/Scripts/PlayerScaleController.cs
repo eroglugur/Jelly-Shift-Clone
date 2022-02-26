@@ -19,7 +19,7 @@ public class PlayerScaleController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Input.touchCount > 0)
+        if (Input.touchCount > 0 && !PlayerCollisionController.objectIsColliding)
         {
             touch = Input.GetTouch(0);
 
@@ -34,7 +34,7 @@ public class PlayerScaleController : MonoBehaviour
                 transform.localScale = new Vector3(newX, newY, transform.localScale.z);
                 if (IsGrounded())
                 {
-                    transform.position = new Vector3(transform.position.x, newY / 2, transform.position.z);
+                    transform.localPosition = new Vector3(transform.localPosition.x, newY / 2, transform.localPosition.z);
                 }
             }
         }

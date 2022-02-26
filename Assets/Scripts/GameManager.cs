@@ -17,16 +17,9 @@ public class GameManager : MonoBehaviour
         levelFinished = false;
         
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     public void StartGame()
     {
-
         isGameActive = true;
     }
     

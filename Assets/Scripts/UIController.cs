@@ -21,14 +21,14 @@ public class UIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameManager.isGameStarted && !GameManager.isGameActive)
+        if (!GameManager.isGameStarted && !GameManager.isGameActive && !GameManager.levelFinished)
         {
             SetStartScreen();
         }
 
         else if (GameManager.isGameStarted && !GameManager.isGameActive && !GameManager.levelFinished)
         {
-            SetRestartScreen();
+            StartCoroutine(SetRestartScreen());
         }
 
         else if (GameManager.levelFinished)
@@ -49,8 +49,9 @@ public class UIController : MonoBehaviour
         }
     }
 
-    void SetRestartScreen()
+    IEnumerator SetRestartScreen()
     {
+        yield return new WaitForSeconds(1);
         restartText.gameObject.SetActive(true);
         if (Input.touchCount > 0)
         {
@@ -65,8 +66,9 @@ public class UIController : MonoBehaviour
         }
     }
 
-    void SetNextLevelScreen()
+    IEnumerator SetNextLevelScreen()
     {
+        yield return new WaitForSeconds(1);
         nextLevelText.gameObject.SetActive(true);
         if (Input.touchCount > 0)
         {
