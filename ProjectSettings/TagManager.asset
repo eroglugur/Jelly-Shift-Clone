@@ -9,6 +9,9 @@ TagManager:
   - Ramp
   - Fall
   - Jump
+  - Ground
+  - TurnRight
+  - TurnLeft
   layers:
   - Default
   - TransparentFX

@@ -5,13 +5,18 @@ public class ShadowController : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject distanceShadow;
 
-    private Movement playerMovement;
+    private PlayerScaleController playerScaleController;
 
+    private Movement playerMovement;
     private MeshRenderer mRenderer;
+
     private void Start()
     {
         mRenderer = GetComponent<MeshRenderer>();
+
         playerMovement = FindObjectOfType<Movement>();
+        playerScaleController = FindObjectOfType<PlayerScaleController>();
+
         SetDestination();
     }
 
@@ -21,7 +26,15 @@ public class ShadowController : MonoBehaviour
         {
             SetDestination();
             mRenderer.enabled = true;
-            distanceShadow.gameObject.SetActive(true);
+            
+            if (playerScaleController.IsGrounded())
+            {
+                distanceShadow.gameObject.SetActive(true);
+            }
+            else
+            {
+                distanceShadow.gameObject.SetActive(false);
+            }
         }
         else
         {
@@ -32,7 +45,7 @@ public class ShadowController : MonoBehaviour
 
     public void SetDestination()
     {
-        transform.position = playerMovement.hit.collider.gameObject.transform.position;
+        transform.position = playerMovement.hit1.collider.gameObject.transform.position;
         transform.localScale = player.transform.localScale;
         transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
 

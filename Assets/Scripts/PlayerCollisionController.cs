@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using DG.Tweening;
 using Vector3 = UnityEngine.Vector3;
@@ -8,6 +9,7 @@ public class PlayerCollisionController : MonoBehaviour
 
     private Rigidbody rb;
     private ShadowController shadowController;
+    private Movement movement;
 
     public static bool objectIsColliding;
 
@@ -16,6 +18,7 @@ public class PlayerCollisionController : MonoBehaviour
         virtualCamera.gameObject.SetActive(true);
         rb = GetComponent<Rigidbody>();
         shadowController = FindObjectOfType<ShadowController>();
+        movement = FindObjectOfType<Movement>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,13 +37,20 @@ public class PlayerCollisionController : MonoBehaviour
             GameManager.levelFinished = true;
         }
 
-        if (other.gameObject.CompareTag("Turn"))
+        if (other.gameObject.CompareTag("TurnLeft"))
+        {
+            transform.DORotate(new Vector3(transform.rotation.x, transform.rotation.y - 90, transform.rotation.z), 0f,
+                RotateMode.WorldAxisAdd);
+
+            transform.localPosition = new Vector3(movement.GetFreezePosition(), transform.position.y, transform.position.z);
+        }
+        
+        if (other.gameObject.CompareTag("TurnRight"))
         {
             transform.DORotate(new Vector3(transform.rotation.x, transform.rotation.y + 90, transform.rotation.z), 0f,
                 RotateMode.WorldAxisAdd);
 
-            transform.localPosition = new Vector3(transform.position.x, transform.position.y, 56.482f);
-            rb.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+            transform.localPosition = new Vector3(movement.GetFreezePosition(), transform.position.y, transform.position.z);
         }
 
         if (other.gameObject.CompareTag("Fall"))
@@ -69,5 +79,7 @@ public class PlayerCollisionController : MonoBehaviour
     private void OnCollisionExit(Collision other)
     {
         objectIsColliding = false;
+        
     }
+    
 }

@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class PlayerScaleController : MonoBehaviour
 {
-    public BoxCollider boxCollider;
 
     private Touch touch; // input
     private float scaleChangeSpeed = 0.5f;
     private float touchSwipeSensitivity = 10;
 
+    public LayerMask ground;
+    
     private void Start()
     {
         transform.localScale = new Vector3(1, 1, 1);
@@ -39,11 +40,14 @@ public class PlayerScaleController : MonoBehaviour
 
     public bool IsGrounded()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, 1f))
+        if (Physics.Raycast(transform.position, Vector3.down, 1f, ground))
         {
             return true;
         }
-        return false;
+        else
+        {
+            return false;
+        }
     }
 
 }
