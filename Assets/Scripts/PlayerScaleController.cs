@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class PlayerScaleController : MonoBehaviour
 {
 
@@ -7,8 +6,6 @@ public class PlayerScaleController : MonoBehaviour
     private float scaleChangeSpeed = 0.5f;
     private float touchSwipeSensitivity = 10;
 
-    public LayerMask ground;
-    
     private void Start()
     {
         transform.localScale = new Vector3(1, 1, 1);
@@ -17,7 +14,7 @@ public class PlayerScaleController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Input.touchCount > 0 && !PlayerCollisionController.objectIsColliding)
+        if (Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
 
@@ -29,24 +26,13 @@ public class PlayerScaleController : MonoBehaviour
                 float newX = Mathf.Clamp(transform.localScale.x / scaleFactor, 0.25f, 2f);
                 float newY = Mathf.Clamp(transform.localScale.y * scaleFactor, 0.25f, 2f);
 
-                transform.localScale = new Vector3(newX, newY, transform.localScale.z);
-                if (IsGrounded())
+                transform.localScale = new Vector3(newX, newY, 1);
+                
+                if (Movement.isGrounded)
                 {
-                    transform.localPosition = new Vector3(transform.localPosition.x, newY / 2, transform.localPosition.z);
+                    transform.position = new Vector3(transform.position.x, newY / 2, transform.position.z);
                 }
             }
-        }
-    }
-
-    public bool IsGrounded()
-    {
-        if (Physics.Raycast(transform.position, Vector3.down, 1f, ground))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 

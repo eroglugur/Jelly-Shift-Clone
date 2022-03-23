@@ -1,11 +1,7 @@
 using UnityEngine;
-
 public class ShadowController : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-    [SerializeField] private GameObject distanceShadow;
-
-    private PlayerScaleController playerScaleController;
 
     private Movement playerMovement;
     private MeshRenderer mRenderer;
@@ -15,7 +11,6 @@ public class ShadowController : MonoBehaviour
         mRenderer = GetComponent<MeshRenderer>();
 
         playerMovement = FindObjectOfType<Movement>();
-        playerScaleController = FindObjectOfType<PlayerScaleController>();
 
         SetDestination();
     }
@@ -26,20 +21,10 @@ public class ShadowController : MonoBehaviour
         {
             SetDestination();
             mRenderer.enabled = true;
-            
-            if (playerScaleController.IsGrounded())
-            {
-                distanceShadow.gameObject.SetActive(true);
-            }
-            else
-            {
-                distanceShadow.gameObject.SetActive(false);
-            }
         }
         else
         {
             mRenderer.enabled = false;
-            distanceShadow.gameObject.SetActive(false);
         }
     }
 

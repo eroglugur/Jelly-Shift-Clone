@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
@@ -15,71 +14,75 @@ public class UIController : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        startText.gameObject.SetActive(true);
+
+        StartCoroutine("SetStartScreen");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (!GameManager.isGameStarted && !GameManager.isGameActive && !GameManager.levelFinished)
-        {
-            SetStartScreen();
-        }
-
-        else if (GameManager.isGameStarted && !GameManager.isGameActive && !GameManager.levelFinished)
-        {
-            StartCoroutine(SetRestartScreen());
-        }
-
-        else if (GameManager.levelFinished)
-        {
-            SetNextLevelScreen();
-        }
-    }
-
-    void SetStartScreen()
+    public IEnumerator SetStartScreen()
     {
         startText.gameObject.SetActive(true);
-        if (Input.touchCount > 0)
+        while (true)
         {
-            Input.GetTouch(0);
-
-            gameManager.StartGame();
-            startText.gameObject.SetActive(false);
+            if (Input.touchCount > 0)
+            {
+                Input.GetTouch(0);
+                
+                gameManager.StartGame();
+                
+                startText.gameObject.SetActive(false);
+                
+                break;
+            }
+            yield return new WaitForFixedUpdate();
         }
     }
 
-    IEnumerator SetRestartScreen()
+    public IEnumerator SetRestartScreen()
     {
         yield return new WaitForSeconds(1);
+
         restartText.gameObject.SetActive(true);
-        if (Input.touchCount > 0)
+
+        while (true)
         {
-            Input.GetTouch(0);
-            
-            GameManager.isGameActive = false;
-            GameManager.isGameStarted = false;
-            GameManager.levelFinished = false;
-            
-            gameManager.RestartLevel();
-            restartText.gameObject.SetActive(false);
+            if (Input.touchCount > 0)
+            {
+                Input.GetTouch(0);
+                restartText.gameObject.SetActive(false);
+
+                GameManager.levelFinished = false;
+                GameManager.isGameActive = false;
+                GameManager.isGameStarted = false;
+
+                gameManager.RestartLevel();
+                break;
+            }
+            yield return new WaitForFixedUpdate();
         }
     }
 
-    IEnumerator SetNextLevelScreen()
+    public IEnumerator SetNextLevelScreen()
     {
         yield return new WaitForSeconds(1);
-        nextLevelText.gameObject.SetActive(true);
-        if (Input.touchCount > 0)
-        {
-            Input.GetTouch(0);
-            
-            GameManager.isGameActive = false;
-            GameManager.levelFinished = false;
-            GameManager.isGameStarted = false;
 
-            gameManager.LoadNextLevel();
-            nextLevelText.gameObject.SetActive(false);
+        nextLevelText.gameObject.SetActive(true);
+        while (true)
+        {
+            if (Input.touchCount > 0)
+            {
+                Input.GetTouch(0);
+
+                nextLevelText.gameObject.SetActive(false);
+
+                GameManager.levelFinished = false;
+                GameManager.isGameActive = false;
+                GameManager.isGameStarted = false;
+
+                GameManager.levelWin = true;
+                gameManager.LoadNextLevel();
+                break;
+            }
+            yield return new WaitForFixedUpdate();
         }
     }
 }
